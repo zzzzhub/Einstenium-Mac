@@ -4,9 +4,9 @@
 int main()
 {
     std::this_thread::sleep_for(std::chrono::seconds(13)); // give ample time to get into a game (you can modify this value based on your Mac's performance)
-    uintptr_t offset = 0x1001dd874;
+    uintptr_t offset = 0x1001dd874; // latest for silicon
     typedef int (*printdef)(int, const char*, ...);
-    auto printfunction = reinterpret_cast<printdef>(_dyld_get_image_vmaddr_slide(0) + (uintptr_t)offset);
+    auto printfunction = reinterpret_cast<printdef>(_dyld_get_image_vmaddr_slide(0) + (uintptr_t)offset); // this changes per device 
 
     auto delayprint = [&](int type, const char* message, std::chrono::milliseconds delay) {
         std::this_thread::sleep_for(delay);
@@ -26,3 +26,5 @@ __attribute__((constructor)) void entry()
     printf("[ Custom printsploit dylib injected ]\n");
     std::thread(main).detach();
 }
+
+// when actually building this file you need to adjust the compile something like: -arch arm64
